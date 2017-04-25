@@ -156,6 +156,25 @@ describe('', function() {
         });
       });
 
+      it('Visiting new link should increase visits by 1', function(done) {
+        requestWithSession(options, function(error, res, body) {
+          db.knex('urls')
+            .where('url', '=', 'http://roflzoo.com/')
+            .then(function(urls) {
+              expect(urls[0].visits).to.equal(0);
+            });
+
+          request('http://127.0.0.1:4568/' + res.body.code, function(error, res, body) {
+            db.knex('urls')
+              .where('url', '=', 'http://roflzoo.com/')
+              .then(function(urls) {
+                expect(urls[0].visits).to.equal(1);
+                done();
+              });
+          });
+        });
+      });
+
     }); // 'Shortening links'
 
     describe('With previously saved urls:', function() {
@@ -330,6 +349,32 @@ describe('', function() {
       });
     });
 
+    it('Logs out existing users', function(done) {
+      var options = {
+        'method': 'POST',
+        'uri': 'http://127.0.0.1:4568/login',
+        'json': {
+          'username': 'Phillip',
+          'password': 'Phillip'
+        }
+      };
+
+      requestWithSession(options, function(error, res, body) {
+        expect(res.headers.location).to.equal('/');
+
+        var options = {
+          'method': 'GET',
+          'uri': 'http://127.0.0.1:4568/logout',
+          'followAllRedirects': true
+        };
+
+        requestWithSession(options, function(error, res, body) {
+          expect(res.req.path).to.equal('/login');
+          done();
+        });
+      });
+    });
+
     it('Users that do not exist are kept on login page', function(done) {
       var options = {
         'method': 'POST',
@@ -342,6 +387,23 @@ describe('', function() {
 
       requestWithSession(options, function(error, res, body) {
         expect(res.headers.location).to.equal('/login');
+        done();
+      });
+    });
+
+    it('Logging in with incorrect password but correct username are kept on login page', function(done) {
+      var options = {
+        'method': 'POST',
+        'uri': 'http://127.0.0.1:4568/login',
+        'followAllRedirects': true,
+        'json': {
+          'username': 'Phillip',
+          'password': 'hunter2'
+        }
+      };
+
+      requestWithSession(options, function(error, res, body) {
+        expect(res.req.path).to.equal('/login');
         done();
       });
     });

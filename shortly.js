@@ -56,6 +56,34 @@ app.get('/links', auth.isLoggedIn, function(req, res) {
   });
 });
 
+app.get('/signup', function(req, res) {
+  res.render('signup');
+});
+
+app.post('/signup', function(req, res) {
+  // console.log('Username:', req.body.username);
+  // console.log('Password:', req.body.password);
+  var username = req.body.username;
+  var password = req.body.password;
+
+  new User({ username: username }).fetch().then(function(found) {
+    if (found) {
+      res.status(200).send(found.attributes);
+    } else {
+      Users.create({
+        username: username,
+        password: password
+      })
+      .then(function(newUser) {
+        res.status(200).send(newUser);
+      });
+    }
+  });
+
+  // Set on our cookie some indicator that we are logged in
+  // Redirect to /
+});
+
 app.post('/links',
 function(req, res) {
   var uri = req.body.url;

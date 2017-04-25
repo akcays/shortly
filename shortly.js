@@ -25,7 +25,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { maxAge: 1209600000 }
 }));
 
 var auth = {
@@ -134,6 +135,15 @@ function(req, res) {
   });
 });
 
+app.get('/logout', function(req, res) {
+  req.session.destroy(err => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
+  });
+});
 
 /************************************************************/
 // Write your authentication routes here

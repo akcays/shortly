@@ -50,6 +50,25 @@ app.get('/login', function(req, res) {
   res.render('login');
 });
 
+app.post('/login', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  new User({ username: username }).fetch().then(function(user) {
+    if (!user) {
+      req.session.authenticated = false;
+      res.redirect('/login');
+    } else {
+      if (password === user.get('password')) {
+        req.session.authenticated = true;
+      } else {
+        req.session.authenticated = false;
+      }
+      res.redirect('/');
+    }
+  });
+});
+
 app.get('/links', auth.isLoggedIn, function(req, res) {
   Links.reset().fetch().then(function(links) {
     res.status(200).send(links.models);
@@ -75,13 +94,12 @@ app.post('/signup', function(req, res) {
         password: password
       })
       .then(function(newUser) {
-        res.status(200).send(newUser);
+        req.session.authenticated = true;
+        // res.status(200).send(newUser);
+        res.redirect('/');
       });
     }
   });
-
-  // Set on our cookie some indicator that we are logged in
-  // Redirect to /
 });
 
 app.post('/links',
@@ -115,6 +133,7 @@ function(req, res) {
     }
   });
 });
+
 
 /************************************************************/
 // Write your authentication routes here

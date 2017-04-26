@@ -26,7 +26,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { maxAge: 1209600000 }
 }));
 
@@ -89,7 +89,7 @@ app.post('/signup', function(req, res) {
 
   new User({ username: username }).fetch().then(function(found) {
     if (found) {
-      res.status(200).send(found.attributes);
+      res.redirect('/signup');
     } else {
       bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(password, salt, null, function(err, hash) {

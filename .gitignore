@@ -7,3 +7,6 @@ db/*.sqlite
 .floobit
 .floo
 .flooignore
+
+# keys
+app/config_keys.js

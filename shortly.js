@@ -107,8 +107,7 @@ app.post('/signup', function(req, res) {
   });
 });
 
-app.post('/links',
-function(req, res) {
+app.post('/links', auth.isLoggedIn, function(req, res) {
   var uri = req.body.url;
 
   if (!util.isValidUrl(uri)) {

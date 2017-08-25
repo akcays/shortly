@@ -1,4 +1,4 @@
-# shortly-express
+# shortly
 
 ## Description
 Shortly is a URL shortener service similar to Bitly.

@@ -2,7 +2,7 @@
 
 ## Description
 Shortly is a URL shortener service similar to Bitly.
-For this project, I build out an authentication system using and other features that enable users to have their own private set of shortened URLs.
+For this project, I build out an authentication system and other features that enable users to have their own private set of shortened URLs.
 
 ## See it in action
 Open your terminal and simply enter the commands below:

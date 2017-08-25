@@ -11,6 +11,8 @@ Open your terminal and simply enter the commands below:
 - npm install
 - npm start
 
+Finally, enter localhost:4568/public on your browser.
+
 ## Technologies
 Backbone.js on the client with a Node/Express-based server.
 The server uses the Bookshelf.js ORM and EJS for templates.

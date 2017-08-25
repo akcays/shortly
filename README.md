@@ -25,4 +25,4 @@ I used express 4 on server side, with libraries like jQuery, underscore.js and B
 This repo includes some basic server specs using Mocha.
 
 
-This is a project I completed at Hack Reactor.
+* This is a project I completed at Hack Reactor.
